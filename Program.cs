@@ -48,7 +48,7 @@ while (running)
         case "2":
           Console.Write("Username: ");
           string username = Console.ReadLine();
-          Console.Write("Password: "),
+          Console.Write("Password: ");
           string password = Console.ReadLine();
 
           var user = users.FirstOrDefault(u => u.GetUsername().Equals(username, StringComparison.OrdinalIgnoreCase));
