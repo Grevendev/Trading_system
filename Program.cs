@@ -112,6 +112,44 @@ while (running)
           }
           Console.ReadLine();
           break;
+
+        case "2":
+          Console.Write("Send to (username): ");
+          string to = Console.ReadLine();
+          Console.Write("Message: ");
+          string content = Console.ReadLine();
+
+          if (users.Any(u => u.GetUsername().Equals(to, StringComparison.OrdinalIgnoreCase)))
+          {
+            messages.Add(new Message(activeUser.GetUsername(), to, content));
+            Console.WriteLine("Message sent.");
+          }
+          else
+          {
+            Console.WriteLine("User not found.");
+          }
+          Console.ReadLine();
+          break;
+
+        case "3":
+          Console.WriteLine("Inbox");
+          foreach (var m in messages.Where(m => m.GetTo() == activeUser.GetUsername()))
+          {
+            m.Show();
+          }
+          Console.ReadLine();
+          break;
+
+        case "9":
+          Console.WriteLine("Logged out.");
+          activeUser = null;
+          Console.ReadLine();
+          break;
+
+        default:
+          Console.WriteLine("Invalid choice.");
+          Console.ReadLine();
+          break;
       }
     }
   }
