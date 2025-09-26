@@ -21,7 +21,7 @@ namespace Trading_System
       name = displayName != "" ? displayName : username;
     }
 
-    // ===== IUser Implementation =====
+    //IUser Implementation
 
     public bool TryLogin(string username, string password)
     {
@@ -55,7 +55,7 @@ namespace Trading_System
       passwordHash = PasswordHelper.HashPassword(newPassword);
     }
 
-    // ===== Säkerhetsfält =====
+    //Säkerhetsfält 
 
     public int GetFailedLogins() { return failedLogins; }
     public void SetFailedLogins(int value) { failedLogins = value; }
@@ -66,7 +66,7 @@ namespace Trading_System
     public bool GetIsActive() { return isActive; }
     public void SetIsActive(bool value) { isActive = value; }
 
-    // ===== Namn =====
+    //Namn
 
     public string GetName() { return name; }
     public void SetName(string newName) { name = newName; }
