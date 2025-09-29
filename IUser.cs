@@ -1,37 +1,25 @@
-namespace Trading_System;
-
-public enum Role
+namespace Trading_System
 {
-  None,
-  Admin,
-  Trader,
-}
-public interface IUser
-{
-  //Inlogging
-  bool TryLogin(string username, string password);
-  void Info();
-  Role GetRole();
-  string GetUsername();
+  public enum Role
+  {
+    None,
+    Admin,
+    Trader,
+  }
 
-  // Lösenordshantering 
+  public interface IUser
+  {
+    bool TryLogin(string username, string password);
+    void Info();
+    Role GetRole();
+    string GetUsername();
 
-  string GetPassword();
-  void SetPassword(string newPassword);
+    string GetPassword();
+    void SetPassword(string newPassword);
 
-  //Säkerhetsfält ( fält direkt i klassen)
+    string GetName();
+    void SetName(string name);
 
-  int GetFailedLogins();
-  void SetFailedLogins(int value);
-
-  bool GetMustChangePassword();
-  void SetMustChangePassword(bool value);
-
-  bool GetIsActive();
-  void SetIsActive(bool value);
-
-  // Namn
-
-  string GetName();
-  void SetName(string name);
+    // Admin-behörigheter är borttagna för Trader
+  }
 }

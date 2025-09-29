@@ -1,33 +1,25 @@
-namespace Trading_System;
-
-public class Message
+namespace Trading_System
 {
-  //Fält
-  private string from;
-  private string to;
-  private string content;
-
-  //Konstruktor
-  public Message(string formUser, string toUser, string messageContent)
+  public class Message
   {
-    from = formUser;
-    to = toUser;
-    content = messageContent;
-  }
+    private string from;
+    private string to;
+    private string content;
 
-  //Metoder
+    public Message(string fromUser, string toUser, string messageContent)
+    {
+      from = fromUser;
+      to = toUser;
+      content = messageContent;
+    }
 
-  public string GetFrom() { return from; }
-  public void SetFrom(string value) { from = value; }
+    public string GetFrom() => from;
+    public string GetTo() => to;
+    public string GetContent() => content;
 
-  public string GetTo() { return to; }
-  public void SetTo(string value) { to = value; }
-
-  public string GetContent() { return content; }
-  public void SetContent(string value) { content = value; }
-
-  public void Show()
-  {
-    Console.WriteLine($"From: {from} -> To: {to} | {content}");
+    public void Show()
+    {
+      Console.WriteLine($"From: {from} -> To: {to} | {content}");
+    }
   }
 }

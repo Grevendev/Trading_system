@@ -1,19 +1,15 @@
 using System;
+using System.Collections.Generic;
 
 namespace Trading_System
 {
   public class Trader : IUser
   {
-    // Fält
     private string userName;
     private string passwordHash;
     private string name;
+    private List<Item> items = new List<Item>();
 
-    private int failedLogins = 0;
-    private bool mustChangePassword = false;
-    private bool isActive = true;
-
-    // Konstruktor
     public Trader(string username, string password, string displayName = "")
     {
       userName = username;
@@ -21,11 +17,8 @@ namespace Trading_System
       name = displayName != "" ? displayName : username;
     }
 
-    //IUser Implementation
-
     public bool TryLogin(string username, string password)
     {
-      if (!isActive) return false;
       if (username != userName) return false;
       return PasswordHelper.VerifyPassword(password, passwordHash);
     }
@@ -35,40 +28,35 @@ namespace Trading_System
       Console.WriteLine($"Name: {name}, Username: {userName}, Role: {GetRole()}");
     }
 
-    public Role GetRole()
+    public Role GetRole() => Role.Trader;
+    public string GetUsername() => userName;
+    public string GetPassword() => passwordHash;
+    public void SetPassword(string newPassword) => passwordHash = PasswordHelper.HashPassword(newPassword);
+    public string GetName() => name;
+    public void SetName(string newName) => name = newName;
+
+    // Items
+    public void AddItem(string itemName, string description)
     {
-      return Role.Trader;
+      items.Add(new Item(itemName, description, userName));
     }
 
-    public string GetUsername()
+    public List<Item> GetItems()
     {
-      return userName;
+      return items;
     }
 
-    public string GetPassword()
+    public void ShowItems()
     {
-      return passwordHash;
+      if (items.Count == 0)
+      {
+        Console.WriteLine("No items uploaded yet.");
+        return;
+      }
+      for (int i = 0; i < items.Count; i++)
+      {
+        Console.WriteLine($"{i + 1}. {items[i].GetName()} - {items[i].GetDescription()}");
+      }
     }
-
-    public void SetPassword(string newPassword)
-    {
-      passwordHash = PasswordHelper.HashPassword(newPassword);
-    }
-
-    //Säkerhetsfält 
-
-    public int GetFailedLogins() { return failedLogins; }
-    public void SetFailedLogins(int value) { failedLogins = value; }
-
-    public bool GetMustChangePassword() { return mustChangePassword; }
-    public void SetMustChangePassword(bool value) { mustChangePassword = value; }
-
-    public bool GetIsActive() { return isActive; }
-    public void SetIsActive(bool value) { isActive = value; }
-
-    //Namn
-
-    public string GetName() { return name; }
-    public void SetName(string newName) { name = newName; }
   }
 }

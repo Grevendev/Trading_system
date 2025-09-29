@@ -14,11 +14,11 @@ namespace Trading_System
         return Convert.ToBase64String(bytes);
       }
     }
+
     public static bool VerifyPassword(string inputPassword, string storedHash)
     {
       if (string.IsNullOrEmpty(storedHash)) return false;
-      var inputHash = HashPassword(inputPassword);
-      return inputHash == storedHash;
+      return HashPassword(inputPassword) == storedHash;
     }
   }
 }

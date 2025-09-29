@@ -13,31 +13,15 @@ namespace Trading_System
       _ownerUsername = ownerUsername;
     }
 
-    public string GetName()
-    {
-      return _name;
-    }
+    public string GetName() => _name;
+    public string GetDescription() => _description;
+    public string GetOwnerUsername() => _ownerUsername;
 
-    public string GetDescription()
-    {
-      return _description;
-    }
-
-    public string GetOwnerUsername()
-    {
-      return _ownerUsername;
-    }
-
-    // Byt ägare – returnerar true om ändringen lyckades, annars false
     public bool ChangeOwner(string newOwner)
     {
-      if (string.IsNullOrEmpty(newOwner))
-      {
-        return false; // Ogiltig indata
-      }
-
+      if (string.IsNullOrEmpty(newOwner)) return false;
       _ownerUsername = newOwner;
-      return true; // Ägaren uppdaterades
+      return true;
     }
 
     public void ShowInfo()
