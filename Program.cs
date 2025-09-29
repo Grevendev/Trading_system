@@ -98,6 +98,8 @@ while (running)
       Console.WriteLine("1. View Users");
       Console.WriteLine("2. Send Message");
       Console.WriteLine("3. Inbox");
+      Console.WriteLine("4. Upload item");
+      Console.WriteLine("5. My items");
       Console.WriteLine("9. Logout");
       Console.Write("Choice: ");
       string input = Console.ReadLine();
@@ -139,6 +141,30 @@ while (running)
           }
           Console.ReadLine();
           break;
+
+        case "4":
+          Console.Write("Enter item name: ");
+          string itemName = Console.ReadLine();
+          Console.Write("Enter item description: ");
+          string itemDesc = Console.ReadLine();
+
+          if (active_user is Trader traderUser)
+          {
+            traderUser.AddItem(itemName, itemDesc);
+            Console.WriteLine("Item uploaded");
+          }
+          Console.ReadLine();
+          break;
+
+        case "6":
+          if (active_user is Trader traderUser2)
+          {
+            traderUser2.ShowItems();
+          }
+          Console.ReadLine();
+          break;
+
+
 
         case "9":
           Console.WriteLine("Logged out.");
