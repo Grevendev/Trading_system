@@ -97,19 +97,6 @@ Bob ser requesten, accepterar.
 
 Ägarskapet av items byts automatiskt och båda får meddelande om trade.
 
-Flödesschema för TradeRequest
-[Trader A]          [Trader B]
-   |                   |
-   |-- Skicka request ->|
-   |                   |
-   |<-- Visa request ---|
-   |                   |
-   |-- Acceptera / Neka |
-   |                   |
-   |-- Om Acceptera -> Byt items
-   |                   |
-   |-- Skicka meddelande
-
 
 Beskrivning:
 
