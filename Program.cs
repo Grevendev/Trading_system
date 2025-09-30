@@ -18,7 +18,7 @@ class Program
     while (running)
     {
       Console.Clear();
-
+      //Välkomst meny för alla användare, där man har möjlighet att registrera sig och logga in, samt avsluta programmet. 
       if (activeUser == null)
       {
         Console.WriteLine("Trading System");
@@ -96,15 +96,17 @@ class Program
         }
       }
       else
+
+      // Meny i inloggat läge. Där man kan navigera sig fram till det man vill utföra. 
       {
-        Console.WriteLine($"Welcome {activeUser.GetName()} ({activeUser.GetRole()})");
-        Console.WriteLine("1. Upload Item");
-        Console.WriteLine("2. Show My Items");
-        Console.WriteLine("3. Show User Items");
-        Console.WriteLine("4. Show All Items");
-        Console.WriteLine("5. Send Trade Request");
-        Console.WriteLine("6. Show Trade Requests");
-        Console.WriteLine("9. Logout");
+        Console.WriteLine($"Welcome {activeUser.GetName()} ({activeUser.GetRole()})");  // Denna säger ett välkomstmeddelande till den aktiva användaren, och vet vad det är för typ av roll som är inloggad.
+        Console.WriteLine("1. Upload Item");               // Ladda upp item
+        Console.WriteLine("2. Show My Items");            // Visa sina egna item
+        Console.WriteLine("3. Show User Items");         // Visa en specifk användares item
+        Console.WriteLine("4. Show All Items");         // Visa alla item i systemet
+        Console.WriteLine("5. Send Trade Request");    // Skicka trade förfrågan
+        Console.WriteLine("6. Show Trade Requests");  // Se sina trade förfrågan
+        Console.WriteLine("9. Logout");              // Logga ut
         Console.Write("Choice: ");
         string input = Console.ReadLine();
 
