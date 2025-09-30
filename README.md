@@ -33,7 +33,7 @@ Varför: Ger en snabb överblick och möjligöra fler trade-möjligheter.
 
 Trade Management
 
-Skcika trade request: Skicka en förfrågan om att byta ett eget item mot någon annans.
+Skicka trade request: Skicka en förfrågan om att byta ett eget item mot någon annans.
 Varför: Kärnan i systemet, möjliggör interaktion mellan användare. 
 
 Acceptera/Avslå request: Den mottagande användaren kan acceptera eller neka en förfrågan. 
@@ -87,13 +87,13 @@ Varför: Ger grundläggande säkerhet för användares lösenord.
 
 Exempelflöde
 
-Alice och Bob registrerar sig som traders.
+Lennart och Roger registrerar sig som traders.
 
-Alice laddar upp “Bok”, Bob laddar upp “Spel”.
+Lennart laddar upp “Dator”, Roger laddar upp “Spel”.
 
-Alice skickar en trade request till Bob, erbjuder “Bok” för “Spel”.
+Lennart skickar en trade request till Roger, erbjuder “Dator” för “Spel”.
 
-Bob ser requesten, accepterar.
+Roger ser requesten, accepterar.
 
 Ägarskapet av items byts automatiskt och båda får meddelande om trade.
 
@@ -109,3 +109,44 @@ Trader B kan acceptera eller neka requesten.
 Om accept → ägarskap av items byts automatiskt och båda får meddelande.
 
 Historiken sparas i systemet så det går att se alla färdiga trades.
+
+
+
+
+Deisgnval i menyhantering. else if istället för switch.
+
+I menyhanteringen används många else if-satser istället flr switch-case. Detta ör ett medvetet val och inte en brist i desigenen.
+
+Anledningarna ör följadne: 
+1. Flexibilitet i logiken
+   Switch-case är ofta bra när man bara jämför ett värde (t.ex. choice) mot en uppsättning konstansta alternativ.
+   Men i dey här systemet behöver vi ibland kombinera logik, exempelvis kolla både användarroll (Trader eller Admin) och vilken menyvalssiffra som används.
+   Med else if kan jag bygga villkor som inte är strikt bundna till ett enda värde.
+
+2. Tydlighet vid komplexa villkor.
+   Exempel:
+   else if (input == "1" && activeUser is Trader t)
+   {
+   //Trader får ladda upp item
+   }
+   else
+   {
+   Console.WriteLine("Onlu traders can upload items.");
+   }
+
+   Detta hade blivit klumpigare i switch-case, eftersom varje case då måste brytas ut och det krävs extra inbäddade if-satser för att kontrollera roller.
+
+3. Enklare att lägga till fler logiska regler.
+   Om man vill bygga på logiken (t.ex. lägga till kontroller för aktiva/inaktiva anvädare, olika begränsingar, särskilda admins etc.) är else if lättare att utveckla vidare.
+   Switch är mer statiskt, och blir snabbt svåröverskådligt när villkoren inte bara handlar om enkla jämförelser av ett värde.
+
+4. I switch kan man glömma break; vilket leder till buggar.
+   Med else if är det tydligt att endast ett block exekveras.
+
+5. Läsvänlighet i just konsolbaserade menyval:
+   Kodens struktur följer naturligt programflödet: "om valet är detta, gör det här, annars om det är detta, gör något annat".
+   Det gör det enklare för den som läser koden att följa logiken steg för steg.
+
+   Sammanfattning:
+   switch-case hade absolut kunnat anvädnas i enklare fall, men i ett mer komplext system som detta ger else if bättrre kontroll och utbyggbarhet.
+   Det är ett designval för att behålla flexibilitet och tydlighet i kodbasen.
