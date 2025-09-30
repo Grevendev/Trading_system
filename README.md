@@ -41,7 +41,7 @@ Example flow
 
 
 Notes: 
-All items and user choices are made with numbers and not with next.
+All items and user choices are made with numbers and not with text.
 That's because it's eaiser to use the program. 
 The system supports unlimited amounts of items and traders. 
 Trade requests send auto message to the reciver. 
