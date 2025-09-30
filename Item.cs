@@ -2,31 +2,23 @@ namespace Trading_System
 {
   public class Item
   {
-    private string _name;
-    private string _description;
-    private string _ownerUsername;
+    private string name;
+    private string description;
+    private string ownerUsername;
 
     public Item(string name, string description, string ownerUsername)
     {
-      _name = name;
-      _description = description;
-      _ownerUsername = ownerUsername;
+      this.name = name;
+      this.description = description;
+      this.ownerUsername = ownerUsername;
     }
 
-    public string GetName() => _name;
-    public string GetDescription() => _description;
-    public string GetOwnerUsername() => _ownerUsername;
+    public string GetName() => name;
+    public string GetDescription() => description;
+    public string GetOwnerUsername() => ownerUsername;
 
-    public bool ChangeOwner(string newOwner)
-    {
-      if (string.IsNullOrEmpty(newOwner)) return false;
-      _ownerUsername = newOwner;
-      return true;
-    }
+    public void ChangeOwner(string newOwner) => ownerUsername = newOwner;
 
-    public void ShowInfo()
-    {
-      Console.WriteLine($"Item: {_name} | Description: {_description} | Owner: {_ownerUsername}");
-    }
+    public void ShowInfo() => Console.WriteLine($"Item: {name} | Description: {description} | Owner: {ownerUsername}");
   }
 }

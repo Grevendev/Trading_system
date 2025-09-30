@@ -6,20 +6,17 @@ namespace Trading_System
     private string to;
     private string content;
 
-    public Message(string fromUser, string toUser, string messageContent)
+    public Message(string fromUser, string toUser, string content)
     {
       from = fromUser;
       to = toUser;
-      content = messageContent;
+      this.content = content;
     }
 
     public string GetFrom() => from;
     public string GetTo() => to;
     public string GetContent() => content;
 
-    public void Show()
-    {
-      Console.WriteLine($"From: {from} -> To: {to} | {content}");
-    }
+    public void Show() => Console.WriteLine($"From: {from} -> To: {to} | {content}");
   }
 }

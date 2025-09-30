@@ -31,31 +31,41 @@ namespace Trading_System
     public Role GetRole() => Role.Trader;
     public string GetUsername() => userName;
     public string GetPassword() => passwordHash;
+
     public void SetPassword(string newPassword) => passwordHash = PasswordHelper.HashPassword(newPassword);
+
+    // Ny metod för att direkt sätta hash (för loading från fil)
+    public void SetPasswordHash(string hash) => passwordHash = hash;
+
+    public int GetFailedLogins() => 0;
+    public void SetFailedLogins(int value) { }
+    public bool GetMustChangePassword() => false;
+    public void SetMustChangePassword(bool value) { }
+    public bool GetIsActive() => true;
+    public void SetIsActive(bool value) { }
+
     public string GetName() => name;
     public void SetName(string newName) => name = newName;
 
-    // Items
-    public void AddItem(string itemName, string description)
+    // --- Item-hantering ---
+    public void AddItem(string name, string description)
     {
-      items.Add(new Item(itemName, description, userName));
+      items.Add(new Item(name, description, userName));
     }
 
-    public List<Item> GetItems()
-    {
-      return items;
-    }
+    public List<Item> GetItems() => items;
 
     public void ShowItems()
     {
       if (items.Count == 0)
       {
-        Console.WriteLine("No items uploaded yet.");
+        Console.WriteLine("No items found.");
         return;
       }
+
       for (int i = 0; i < items.Count; i++)
       {
-        Console.WriteLine($"{i + 1}. {items[i].GetName()} - {items[i].GetDescription()}");
+        Console.WriteLine($"{i + 1}. {items[i].GetName()} - {items[i].GetDescription()} (Owner: {items[i].GetOwnerUsername()})");
       }
     }
   }

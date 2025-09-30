@@ -1,0 +1,3 @@
+Admin|edvin@hotmail.com|75K3eLr+dx6JJFuJ7LwIpEpOFmwGZZkRiB84PURz6U8=|edvin|True
+Trader|kalle|erywZSdzWH0krezHCuZ57yt/PM+zO0xY8I1kQB3Rwxs=|kalle|True
+Trader|tina|0Ui/obvhzkY19rxlTeWCcI1u//mBW07Si9SbaIgw0ZQ=|tina|True

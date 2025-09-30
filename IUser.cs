@@ -4,7 +4,7 @@ namespace Trading_System
   {
     None,
     Admin,
-    Trader,
+    Trader
   }
 
   public interface IUser
@@ -13,13 +13,15 @@ namespace Trading_System
     void Info();
     Role GetRole();
     string GetUsername();
-
     string GetPassword();
     void SetPassword(string newPassword);
-
+    int GetFailedLogins();
+    void SetFailedLogins(int value);
+    bool GetMustChangePassword();
+    void SetMustChangePassword(bool value);
+    bool GetIsActive();
+    void SetIsActive(bool value);
     string GetName();
     void SetName(string name);
-
-    // Admin-behörigheter är borttagna för Trader
   }
 }

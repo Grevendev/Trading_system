@@ -1,0 +1,2 @@
+kalle|tina|sten|påse|Accepted
+tina|kalle|påse|sten|Pending

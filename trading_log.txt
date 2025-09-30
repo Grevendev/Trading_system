@@ -1,0 +1,20 @@
+2025-09-30 13:20:54: Admin created: edvin@hotmail.com
+2025-09-30 13:21:01: New trader registered: kalle
+2025-09-30 13:21:14: New trader registered: stina
+2025-09-30 13:21:22: User logged in: kalle
+2025-09-30 13:21:35: User kalle uploaded item: apelsin
+2025-09-30 13:21:46: User kalle uploaded item: dator
+2025-09-30 13:21:52: User logged out: kalle
+2025-09-30 13:21:56: User logged in: stina
+2025-09-30 13:22:09: User stina uploaded item: nöt
+2025-09-30 13:22:20: User stina uploaded item: julklapp
+2025-09-30 13:23:00: Trade request: stina -> kalle | Requested: apelsin | Offered: nöt
+2025-09-30 13:23:25: User logged out: stina
+2025-09-30 13:23:32: User logged in: stina
+2025-09-30 13:23:51: Admin created: edvin@hotmail.com
+2025-09-30 13:24:25: User logged in: edvin@hotmail.com
+2025-09-30 13:29:34: User logged out: edvin@hotmail.com
+2025-09-30 13:29:36: Program exited.
+---- Users ----
+edvin@hotmail.com (Admin) Items: 
+---- Trade Requests ----
