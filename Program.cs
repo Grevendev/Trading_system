@@ -243,7 +243,7 @@ class Program
       }
     }
 
-    // --- Save all data before exit ---
+    // Save all data before exit.
     Logger.SaveUsers(users);
     Logger.SaveItems(users);
     Logger.SaveMessages(messages);
