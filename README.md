@@ -4,16 +4,16 @@ Welcome
 Trading System
 
 Är ett konsolbaserat tradingprogram i C#.
-Som låter användare att regitrera sig, logga in, byta objektm skicka meddelande och hantera trade requests.
-Programmet använder filbaserad lagring föra att all deta ska finnas kvar mellan sessioner. 
+Som låter användare att regitrera sig, logga in, byta objekt, skicka meddelande och hantera trade requests.
+Programmet använder filbaserad lagring för att all detta ska finnas kvar mellan sessioner. 
 
 Funktioner och användarhantering. 
 
-Registrera ny Trader: Tillåter nya användare att skapa ett komto. 
-Varför; För att seperara roller mellan admin och traders, samt för att kunna koppla items till rätt användare. 
+Registrera ny Trader: Tillåter nya användare att skapa ett konto. 
+Varför: För att seperara roller mellan admin och traders, samt för att kunna koppla items till rätt användare. 
 
-Login/Logout: Användare loggar in med sitt konto flr att få tillgång till funktion.
-Varför: Säkerstöller att endast rätt användare kan uföra actions som påverkar deras items eller trade requests. 
+Login/Logout: Användare loggar in med sitt konto för att få tillgång till funktioner.
+Varför: Säkerställer att endast rätt användare kan uföra actions som påverkar deras items eller trade requests. 
 
 Admin: Administratören har specialrättigheter, t.ex. för att kunna se alla användare.
 Varför: För att möjliggöra övervakning och management utan att blanda in traders i administrationsuppgifter.
@@ -117,7 +117,7 @@ Deisgnval i menyhantering. else if istället för switch.
 
 I menyhanteringen används många else if-satser istället flr switch-case. Detta ör ett medvetet val och inte en brist i desigenen.
 
-Anledningarna ör följadne: 
+Anledningarna är följadne: 
 1. Flexibilitet i logiken
    Switch-case är ofta bra när man bara jämför ett värde (t.ex. choice) mot en uppsättning konstansta alternativ.
    Men i dey här systemet behöver vi ibland kombinera logik, exempelvis kolla både användarroll (Trader eller Admin) och vilken menyvalssiffra som används.
