@@ -131,7 +131,7 @@ Anledningarna är följadne:
    }
    else
    {
-   Console.WriteLine("Onlu traders can upload items.");
+   Console.WriteLine("Only traders can upload items.");
    }
 
    Detta hade blivit klumpigare i switch-case, eftersom varje case då måste brytas ut och det krävs extra inbäddade if-satser för att kontrollera roller.
