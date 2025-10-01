@@ -72,7 +72,7 @@ class Program
       }
       else
       {
-        // --- Inloggad meny ---
+        // Inloggad meny 
         Console.WriteLine($"Welcome {activeUser.GetName()} ({activeUser.GetRole()})");
         Console.WriteLine("1. Upload Item");
         Console.WriteLine("2. Show My Items");

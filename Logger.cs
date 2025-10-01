@@ -141,9 +141,9 @@ namespace Trading_System
       return messages;
     }
 
-    // ============================================
+
     // TradeRequests
-    // ============================================
+
     public static void SaveTrades(List<TradeRequest> trades)
     {
       using (StreamWriter sw = new StreamWriter(tradeFile))

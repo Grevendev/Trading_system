@@ -1,8 +1,8 @@
 using System;
 
-namespace Trading_System    // Admin-klass, som har hand om användare, men har ej tillgång till trading funktioner.
+namespace Trading_System
 {
-  public class Admin : IUser
+  public class Admin : IUser     // Admin-klass, som har hand om användare, men har ej tillgång till trading funktioner.
   {
     private string userName;
     private string passwordHash;

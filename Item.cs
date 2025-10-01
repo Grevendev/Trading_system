@@ -1,4 +1,4 @@
-namespace Trading_System
+namespace Trading_System      //Item-klass, som gör att man kan skapa item med namn och beskriving av itemet. 
 {
   public class Item
   {
