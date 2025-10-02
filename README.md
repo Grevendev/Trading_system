@@ -1,5 +1,5 @@
 
-Trading System
+# **Trading System**
 
 Snabbstart
 1. Starta programmet genom att köra dotnet run i projektmappen.
