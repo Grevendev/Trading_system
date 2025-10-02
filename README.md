@@ -130,6 +130,4 @@ Det är lätt att bygga ut systemet med fler funktioner, exempelvis:
 - Avancerad rättighetskontroll
 - Fler typer av meddelanden
 - Statistik och rapportering av trades
-=======
 
->>>>>>> 571a405a0d66f2b011894e8cd6ff285c8377af4c
