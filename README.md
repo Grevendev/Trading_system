@@ -1,152 +1,132 @@
-Welcome
-
-
 Trading System
 
-Är ett konsolbaserat tradingprogram i C#.
-Som låter användare att regitrera sig, logga in, byta objekt, skicka meddelande och hantera trade requests.
-Programmet använder filbaserad lagring för att all detta ska finnas kvar mellan sessioner. 
+Snabbstart
+1. Starta programmet genom att köra dotnet run i projektmappen.
+2. Registrera en Trader – välj "Registrera Trader" och skapa ett konto.
+3. Logga in med ditt användarnamn och lösenord.
+4. Lägg till ett item (ex. "Cykel") i din samling.
+5. Visa andras items och skicka en trade request.
+6. Acceptera/Neka trades i din lista.
+7. Skicka och läs meddelanden för att kommunicera med andra Traders.
+8. Logga ut – all data sparas automatiskt till nästa gång.
 
-Funktioner och användarhantering. 
+Om programmet:
 
-Registrera ny Trader: Tillåter nya användare att skapa ett konto. 
-Varför: För att seperara roller mellan admin och traders, samt för att kunna koppla items till rätt användare. 
+Ett konsolbaserat tradingprogram i C# som låter användare:
+- Registrera och logga in som Trader eller Admin
+- Ladda upp och byta objekt (items)
+- Skicka och hantera trade requests
+- Kommunicera via ett meddelandesystem
+- Behålla all data mellan sessioner tack vare filbaserad lagring
 
-Login/Logout: Användare loggar in med sitt konto för att få tillgång till funktioner.
-Varför: Säkerställer att endast rätt användare kan uföra actions som påverkar deras items eller trade requests. 
+Systemet är byggt för att simulera ett enkelt men utbyggbart handelsnätverk mellan användare, där säkerhet, roller och tydlig logik är centrala designval.
 
-Admin: Administratören har specialrättigheter, t.ex. för att kunna se alla användare.
-Varför: För att möjliggöra övervakning och management utan att blanda in traders i administrationsuppgifter.
+Funktioner:
 
-Item hantering: 
-Ladda upp item: Traders kan lägga till objekt de vill byta. 
-Varför: Nödvändigt för trading-logiken och för att kunna erbjuda saker till andra användare. 
+Användarhantering:
 
-Visa egna items: Lista alla items som användare äger. 
-Varför: Ger översikt över egna resurser. 
+- Registrera ny Trader – Nya användare kan skapa ett konto.
+Varför: Separera roller mellan Admin och Trader, samt koppla items till rätt användare.
 
-Visa andra användares items: Sök på en specifik användare och se deras items.
-Varför: För att kuna välja vad man vill byta mot.
+- Login/Logout – Inloggning krävs för att utföra handlingar.
+Varför: Säkerställer att endast rätt användare kan hantera sina resurser.
 
-Visa alla items: Lista alla items i systemet. 
-Varför: Ger en snabb överblick och möjligöra fler trade-möjligheter. 
+- Admin – Administratören har översiktsrättigheter (se användare, hantera status).
+Varför: Möjliggör systemadministration utan att blanda ihop rollerna.
 
-Trade Management
+Item-hantering:
 
-Skicka trade request: Skicka en förfrågan om att byta ett eget item mot någon annans.
-Varför: Kärnan i systemet, möjliggör interaktion mellan användare. 
+- Ladda upp item – Traders kan lägga till objekt att byta.
+- Visa egna items – Översikt över vad man äger.
+- Visa andra användares items – Hitta specifika objekt hos andra traders.
+- Visa alla items – Snabb överblick över allt som finns i systemet.
 
-Acceptera/Avslå request: Den mottagande användaren kan acceptera eller neka en förfrågan. 
-varför: Säkerställer att trades endast genomförs med båda parters samtycke. 
+Varför: Items är grunden för trading, och tydlig översikt gör att användare kan fatta beslut om byten.
 
-Färdiga trades: Lista alla trades som har accepterats eller nekats.
-Varför: För att kunna se historik och följa upp tidigare utbyten.
+Trade Management:
 
-Meddelanden
+- Skicka trade request – Be om att byta ett av dina objekt mot någon annans.
+- Acceptera/Neka – Mottagaren kan avgöra om bytet ska ske.
+- Färdiga trades – Se historik över avslutade (accepterade eller nekade) trades.
 
-Skicka meddelande: Traders kan kommunicera med varandra.
-Varför: Underlättar samförstånd och koordinering av trades.
+Varför: Kärnan i systemet: möjliggör interaktion mellan användare, med tydlig historik och kontroll.
 
-Inbox: Se meddelanden man fått.
-Varför: För att hålla koll på kommunikation och notiser om trade requests.
+Meddelanden: 
 
-Persistens (filbaserad lagring)
+- Skicka meddelande – Traders kan kommunicera direkt.
+- Inbox – Se inkommande meddelanden, t.ex. notifieringar om trades.
 
-Users.txt: Lagrar användarnamn, lösenord (hashat), namn, roll och aktiv status.
+Varför: Kommunikation underlättar förhandling och samförstånd mellan användare.
 
-Items.txt: Lagrar items och vilken användare som äger dem.
+Persistens (filbaserad lagring): 
 
-Messages.txt: Lagrar skickade meddelanden.
+- Users.txt – sparar användarnamn, lösenord (hash), namn, roll och status.
+- Items.txt – sparar alla items och deras ägare.
+- Messages.txt – sparar skickade meddelanden.
+- Trades.txt – sparar alla trade requests och deras status.
 
-Trades.txt: Lagrar trade requests och deras status.
+Varför: Gör att systemets tillstånd bevaras även efter programmet avslutas, utan att behöva en databas.
 
-Varför: För att data ska finnas kvar även efter att programmet stängts.
+Tekniska förklaringar: 
 
-Tekniska Förklaringar
+- IUser (interface): Definierar gemensamma metoder för alla användare.
+- Trader & Admin (klasser): Implementerar IUser med olika roller.
+- Item (klass): Representerar objekt som kan bytas.
+- TradeRequest (klass): Hanterar förfrågningar, accept/deny och ägarbyte av items.
+- Message (klass): Representerar meddelanden mellan användare.
+- Logger / ItemStorage (statiska klasser): Läser och sparar användare, items, trades och meddelanden till filer.
+- PasswordHelper (statisk klass): Hashar och verifierar lösenord för säkerhet.
 
-IUser (interface): Definierar gemensamma egenskaper och metoder för alla användare.
-Varför: Gör att programmet kan hantera både traders och admins på ett enhetligt sätt.
+Exempelflöde: 
 
-Trader och Admin (klasser): Implementerar IUser med specifika metoder för respektive roll.
-Varför: Traders har items och kan göra trades, medan Admin kan övervaka systemet.
+1. Lennart och Roger registrerar sig som Traders.
+2. Lennart laddar upp "Dator", Roger laddar upp "Spel".
+3. Lennart skickar en trade request: erbjuder "Dator" för "Spel".
+4. Roger ser förfrågan och accepterar.
+5. Items byter ägare automatiskt.
+6. Ett meddelande skickas om att traden är genomförd.
+7. Historiken sparas i systemet.
 
-Item (klass): Representerar objekt som kan bytas.
-Varför: Objekt är själva grunden för trading-logiken.
+Användarguide – steg för steg:
 
-TradeRequest (klass): Representerar en tradeförfrågan mellan två användare.
-Varför: Hanterar logik för offer, request, accept och deny.
+1. Starta programmet – du möts av huvudmenyn.
+2. Registrera en Trader om du är ny. Admin-konto finns för systemhantering.
+3. Logga in för att komma åt funktioner.
+4. Hantera dina items:
+- Lägg till objekt du vill byta bort.
+- Visa dina egna items eller sök efter andras.
+- Lista alla items i systemet.
+5. Skicka en trade request:
+- Välj ett av dina items.
+- Erbjud det i utbyte mot någon annans item.
+- Vänta på att mottagaren accepterar eller nekar.
+6. Kommunicera via meddelanden:
+- Skicka direktmeddelanden.
+- Läs nya meddelanden i din inbox.
+7. Logga ut – programmet sparar allt till filer för nästa gång.
 
-Message (klass): Representerar meddelanden mellan användare.
-Varför: Möjliggör kommunikation kopplad till trade-förfrågningar.
+Designval: else if istället för switch: 
 
-Logger / UserStorage / ItemStorage (statisk klass): Ansvarar för att spara och läsa användare, items, trades och meddelanden till/från filer.
-Varför: Säkerställer persistens och enkel filhantering utan databas.
+I menyhanteringen används else if-satser istället för switch-case. Detta är ett medvetet designval.
 
-PasswordHelper (statisk klass): Hashar och verifierar lösenord.
-Varför: Ger grundläggande säkerhet för användares lösenord.
+Varför?
+- Flexibilitet – kan kombinera villkor (t.ex. roll + menyval).
+- Tydlighet – enklare att läsa vid komplexa regler.
+- Utbyggbarhet – lättare att lägga till nya regler.
+- Säkerhet – inga buggar pga glömda break;.
+- Läsvänlighet – följer programmets naturliga flöde.
 
-Exempelflöde
+Slutsats: 
 
-Lennart och Roger registrerar sig som traders.
+Trading System är ett enkelt men kraftfullt konsolprogram byggt i C#.
 
-Lennart laddar upp “Dator”, Roger laddar upp “Spel”.
+Det visar:
+- Användarroller och säkerhet
+- Objektorienterad design (klasser, interface, roller)
+- Persistens utan databas
+- Kommunikation och handelslogik mellan användare
 
-Lennart skickar en trade request till Roger, erbjuder “Dator” för “Spel”.
-
-Roger ser requesten, accepterar.
-
-Ägarskapet av items byts automatiskt och båda får meddelande om trade.
-
-
-Beskrivning:
-
-Trader A skickar en trade request till Trader B.
-
-Trader B ser requesten i sin lista.
-
-Trader B kan acceptera eller neka requesten.
-
-Om accept → ägarskap av items byts automatiskt och båda får meddelande.
-
-Historiken sparas i systemet så det går att se alla färdiga trades.
-
-
-
-
-Deisgnval i menyhantering. else if istället för switch.
-
-I menyhanteringen används många else if-satser istället flr switch-case. Detta ör ett medvetet val och inte en brist i desigenen.
-
-Anledningarna är följadne: 
-1. Flexibilitet i logiken
-   Switch-case är ofta bra när man bara jämför ett värde (t.ex. choice) mot en uppsättning konstansta alternativ.
-   Men i dey här systemet behöver vi ibland kombinera logik, exempelvis kolla både användarroll (Trader eller Admin) och vilken menyvalssiffra som används.
-   Med else if kan jag bygga villkor som inte är strikt bundna till ett enda värde.
-
-2. Tydlighet vid komplexa villkor.
-   Exempel:
-   else if (input == "1" && activeUser is Trader t)
-   {
-   //Trader får ladda upp item
-   }
-   else
-   {
-   Console.WriteLine("Only traders can upload items.");
-   }
-
-   Detta hade blivit klumpigare i switch-case, eftersom varje case då måste brytas ut och det krävs extra inbäddade if-satser för att kontrollera roller.
-
-3. Enklare att lägga till fler logiska regler.
-   Om man vill bygga på logiken (t.ex. lägga till kontroller för aktiva/inaktiva anvädare, olika begränsingar, särskilda admins etc.) är else if lättare att utveckla vidare.
-   Switch är mer statiskt, och blir snabbt svåröverskådligt när villkoren inte bara handlar om enkla jämförelser av ett värde.
-
-4. I switch kan man glömma break; vilket leder till buggar.
-   Med else if är det tydligt att endast ett block exekveras.
-
-5. Läsvänlighet i just konsolbaserade menyval:
-   Kodens struktur följer naturligt programflödet: "om valet är detta, gör det här, annars om det är detta, gör något annat".
-   Det gör det enklare för den som läser koden att följa logiken steg för steg.
-
-   Sammanfattning:
-   switch-case hade absolut kunnat anvädnas i enklare fall, men i ett mer komplext system som detta ger else if bättrre kontroll och utbyggbarhet.
-   Det är ett designval för att behålla flexibilitet och tydlighet i kodbasen.
+Det är lätt att bygga ut systemet med fler funktioner, exempelvis:
+- Avancerad rättighetskontroll
+- Fler typer av meddelanden
+- Statistik och rapportering av trades
