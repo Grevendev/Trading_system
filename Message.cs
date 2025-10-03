@@ -1,57 +1,30 @@
+using System;
+
 namespace Trading_System
 {
-  //
-  //Message
-  //
-  //Denna klass representerar ett meddelande mellan två användare i trading-systemet.
-  //
-  //Varje meddelande har:
-  //Avsändare (from)
-  //Mottagare (to)
-  //Själva innehållet (content)
-  //
-  //Meddeladnen anvädns främst för kommunikation mellan traders
-  //när de vill skicka information, förhandla eller notifiera om trade requets.
+  /// <summary>
+  /// Representerar ett meddelande mellan användare.
+  /// </summary>
   public class Message
   {
-    //Fält för att lagra information om meddelandet
-    private string from; // Anvsändarens användarnamn
-    private string to; // Mottagerens användarnamn
-    private string content; // Själva meddelandetexten
+    private string _from;
+    private string _to;
+    private string _content;
 
-    //
-    //Kontruktor
-    //
-    //Skapa ett nytt meddelande
-    //Parametrar:
-    // fromUser: Avsändarens användarnamn
-    //toUser: Mottagarens användarnamn
-    //content: TExten i meddelandet
-
-    public Message(string fromUser, string toUser, string content)
+    public Message(string from, string to, string content)
     {
-      from = fromUser;
-      to = toUser;
-      this.content = content;
+      _from = from;
+      _to = to;
+      _content = content;
     }
 
-    //
-    //Getters
-    //
-    // Dessa metoder används för att läsa information om meddeladnet
+    public string GetFrom() => _from;
+    public string GetTo() => _to;
+    public string GetContent() => _content;
 
-    public string GetFrom() => from; // Retunerar avsändarens namn
-    public string GetTo() => to; // Returnerar mottagrens namn
-    public string GetContent() => content; // Returnerar meddelandetexten
-
-    //
-    //Show
-    //
-    // Skriver ut meddelandet i konsolen på ett lättläst format
-    //Exempel: "From: Lennart -> To: Roger | Hej, vill du byta item?"
-    //
-    //Denna metod används framför allt när en användare vill se sin inbox
-
-    public void Show() => Console.WriteLine($"From: {from} -> To: {to} | {content}");
+    public void Show()
+    {
+      Console.WriteLine($"From: {_from} | Message: {_content}");
+    }
   }
 }

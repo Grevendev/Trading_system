@@ -1,2 +1,4 @@
-kalle|påse|stor
-tina|sten|stor
+bord|svart|lisa
+stol|röd|lena
+boat|black|hans
+rod|ros|edvin

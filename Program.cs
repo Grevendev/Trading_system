@@ -6,109 +6,76 @@ class Program
 {
   static void Main()
   {
-    // Vid programstart
-    // 
-    // Här laddar vi in all tidigare sparad information så att
-    // systemt blir "bestående" mellan körningar. Detta gör att
-    // anvvändare, items, meddelande och trade requests inte försvinner
-    // när man stänger ner programmet. 
+    // Ladda all data vid start
+    List<IUser> users = Logger.LoadUsers();
+    List<Message> messages = Logger.LoadMessages();
+    List<TradeRequest> tradeRequests = Logger.LoadTrades(users);
+    Logger.LoadItems(users);
 
-
-    List<IUser> users = Logger.LoadUsers(); // Ladda alla användare
-    List<Message> messages = Logger.LoadMessages(); // Ladda alla meddelande
-    List<TradeRequest> tradeRequests = new List<TradeRequest>(); // Skapar lista för trade requests
-    Logger.LoadTrades(users, tradeRequests); // Kopplar trades till användarna 
-    Logger.LoadItems(users); // Laddar in items kopplade till respektive trader.
-
-    // Variabel som håller koll på den användare som är inloggad just nu.
-    // Är den null -> ingen användare inloggad.
     IUser activeUser = null;
-
-    // Boolean som styr huvudloopen. Så länge "running" är true
-    //kör programmet. När användaren väljer att avsluta sätts den till false.
     bool running = true;
-
-    //Huvudloop
-
-    // Här körs programmets huvudloop. Den rensar skärmen vid varje iteration
-    // och kollar om någon är inloggad eller ej.
-    // Beroende på detta visas olika menyer.
 
     while (running)
     {
-      Console.Clear(); // Rensa skärmen för tydlighet.
+      Console.Clear();
 
-      // Meny för ej inloggad användare
-      //
-      // Här vissas alternativ för att registera sig, logga in eller avsluta.
       if (activeUser == null)
       {
+        // Meny för ej inloggad användare
         Console.WriteLine("Trading System");
-        Console.WriteLine("1. Register new Trader"); // Skapa ny användare
-        Console.WriteLine("2. Login"); // Logga in
-        Console.WriteLine("0. Exit"); // Avsluta
+        Console.WriteLine("1. Register new Trader");
+        Console.WriteLine("2. Login");
+        Console.WriteLine("0. Exit");
         Console.Write("Choice: ");
         string choice = Console.ReadLine();
 
         switch (choice)
         {
           case "1":
-            // Nyregistering av trader.
             Console.Write("Enter username: ");
             string newUser = Console.ReadLine();
             Console.Write("Enter password: ");
             string newPass = Console.ReadLine();
 
-
-            // Kontrollera om användarnamnet redan finns
             bool exists = false;
             foreach (var u in users)
               if (u.GetUsername() == newUser) { exists = true; break; }
 
-            if (exists) Console.WriteLine("User already exists."); // Kan ej skapa dublicerad användare
+            if (exists) Console.WriteLine("User already exists.");
             else
             {
-              // Lägg till en ny trader i listan.
-              users.Add(new Trader(newUser, newPass));
+              users.Add(new Trader(newUser, newPass, newUser));
               Console.WriteLine("Trader registered successfully.");
+              Logger.SaveUsers(users);
             }
-            Console.ReadLine(); // Vänta på knapptryck för att ge feedback.
+            Console.ReadLine();
             break;
 
           case "2":
-            // Inlogging.
             Console.Write("Username: ");
             string username = Console.ReadLine();
             Console.Write("Password: ");
             string password = Console.ReadLine();
 
             IUser found = null;
-            // Leta upp användaren i listan.
             foreach (var u in users)
               if (u.GetUsername() == username) { found = u; break; }
-            // Om användaren inte finns.
+
             if (found == null) Console.WriteLine("User not found.");
-            // Om kontot är inaktivt
             else if (!found.GetIsActive()) Console.WriteLine("Account inactive.");
-            // Om lösenordet stämmer
-            else if (found.TryLogin(username, password)) { activeUser = found; Console.WriteLine("Login successful."); } // Sätt den inloggade användaren
-            else Console.WriteLine("Login failed."); // Fel lösenord
+            else if (found.TryLogin(username, password)) { activeUser = found; Console.WriteLine("Login successful."); }
+            else Console.WriteLine("Login failed.");
             Console.ReadLine();
             break;
 
           case "0":
-            // Avslutar programmet.
-            running = false; // Avsluta loopen
+            running = false;
             break;
         }
       }
       else
       {
-        // Meny för inloggad användare.
-
-        // Här listas alla funktioner som finns när en användare är inloggad.
-        // Systemet känner av om det är en Trader eller Admin, men fokus ligger
-        // på Trader eftersom de kan hantera item och trades.
+        // Meny för inloggad användare
         Console.WriteLine($"Welcome {activeUser.GetName()} ({activeUser.GetRole()})");
         Console.WriteLine("1. Upload Item");
         Console.WriteLine("2. Show My Items");
@@ -124,188 +91,154 @@ class Program
         Console.Write("Choice: ");
         string input = Console.ReadLine();
 
-        // 1. Ladda upp item.
-        if (input == "1")
+        // 1. Upload item
+        if (input == "1" && activeUser is Trader trader1)
         {
-          if (activeUser is Trader trader1)
-          {
-            // Användaren får ange namn och beskriving på sitt item.
-            Console.Write("Item Name: ");
-            string name = Console.ReadLine();
-            Console.Write("Item Description: ");
-            string desc = Console.ReadLine();
-
-            // Lägger till item på användarens lista.
-            trader1.AddItem(name, desc);
-            Console.WriteLine("Item uploaded.");
-          }
-          else Console.WriteLine("Only traders can upload items."); // Admins kan ej ha items.
+          Console.Write("Item Name: ");
+          string name = Console.ReadLine();
+          Console.Write("Item Description: ");
+          string desc = Console.ReadLine();
+          trader1.AddItem(name, desc);
+          Logger.SaveItems(users);
+          Console.WriteLine("Item uploaded.");
           Console.ReadLine();
         }
+        else if (input == "1") { Console.WriteLine("Only traders can upload items."); Console.ReadLine(); }
 
-        // 2. Visa mina items.
-        else if (input == "2")
+        // 2. Show my items
+        else if (input == "2" && activeUser is Trader trader2)
         {
-          if (activeUser is Trader trader2)
-          {
-            Console.WriteLine("Your items:");
-            trader2.ShowItems(); // Skriver ut alla items användaren äger
-          }
-          else Console.WriteLine("Only traders have items.");
+          Console.WriteLine("Your items:");
+          trader2.ShowItems();
           Console.ReadLine();
         }
-        // 3. Visa specifik användares items.
+        else if (input == "2") { Console.WriteLine("Only traders have items."); Console.ReadLine(); }
+
+        // 3. Show specific user's items
         else if (input == "3")
         {
-          Console.Write("Enter username to view items: ");
+          Console.Write("Enter username: ");
           string uname = Console.ReadLine();
-          IUser userFound = users.Find(u => u.GetUsername() == uname);
-          if (userFound is Trader trader) trader.ShowItems();
+          IUser uFound = null;
+          foreach (var u in users)
+            if (u.GetUsername() == uname) { uFound = u; break; }
+
+          if (uFound is Trader tr) tr.ShowItems();
           else Console.WriteLine("Trader not found.");
           Console.ReadLine();
         }
-        // 4. Visa alla items i systemet.
+
+        // 4. Show all items
         else if (input == "4")
         {
           foreach (var u in users)
-            if (u is Trader tr) { Console.WriteLine($"User: {tr.GetUsername()}"); tr.ShowItems(); } // Skriver ut items per användare.
+            if (u is Trader tr) { Console.WriteLine($"User: {tr.GetUsername()}"); tr.ShowItems(); }
           Console.ReadLine();
         }
-        // 5. Skicka trade request.
-        else if (input == "5")
+
+        // 5. Send trade request
+        else if (input == "5" && activeUser is Trader traderFrom)
         {
-          if (activeUser is Trader traderFrom)
-          {
-            // Användaren får först välja vilken tradeer de vill skicka förfrågan till.
-            Console.WriteLine("Select user to request item from:");
-            int index = 1;
-            foreach (var u in users)
-            {
-              if (u is Trader t && t != traderFrom)
-              {
-                Console.WriteLine($"{index}. {t.GetUsername()}");
-                index++;
-              }
-            }
-            // Välj trader baserat på index
-            int sel = int.Parse(Console.ReadLine()) - 1;
-            Trader targetTrader = null;
-            foreach (var u in users)
-            {
-              if (u is Trader t && t != traderFrom && sel-- == 0) { targetTrader = t; break; }
-            }
+          Console.WriteLine("Select user to request item from:");
+          int idx = 1;
+          Dictionary<int, Trader> userMap = new Dictionary<int, Trader>();
+          foreach (var u in users)
+            if (u is Trader t && t != traderFrom) { Console.WriteLine($"{idx}. {t.GetUsername()}"); userMap[idx] = t; idx++; }
 
-            if (targetTrader != null)
-            {
-              // Välj vilket item man vill ha
-              Console.WriteLine("Select item to request:");
-              targetTrader.ShowItems();
-              int itemIndex = int.Parse(Console.ReadLine()) - 1;
-              if (itemIndex >= 0 && itemIndex < targetTrader.GetItems().Count)
-              {
-                Item requested = targetTrader.GetItems()[itemIndex];
+          Console.Write("Choice: ");
+          int sel = int.Parse(Console.ReadLine());
+          if (!userMap.ContainsKey(sel)) { Console.WriteLine("Invalid choice."); Console.ReadLine(); continue; }
+          Trader targetTrader = userMap[sel];
 
+          Console.WriteLine("Select item to request:");
+          targetTrader.ShowItems();
+          Console.Write("Item number: ");
+          int itemIndex = int.Parse(Console.ReadLine()) - 1;
+          if (itemIndex < 0 || itemIndex >= targetTrader.GetItems().Count) { Console.WriteLine("Invalid item."); Console.ReadLine(); continue; }
+          Item requested = targetTrader.GetItems()[itemIndex];
 
-                // Välj vilket eget item man erbjuder.
-                Console.WriteLine("Select your own item to offer:");
-                traderFrom.ShowItems();
-                int offerIndex = int.Parse(Console.ReadLine()) - 1;
-                if (offerIndex >= 0 && offerIndex < traderFrom.GetItems().Count)
-                {
-                  Item offered = traderFrom.GetItems()[offerIndex];
+          Console.WriteLine("Select your own item to offer:");
+          traderFrom.ShowItems();
+          Console.Write("Item number: ");
+          int offerIndex = int.Parse(Console.ReadLine()) - 1;
+          if (offerIndex < 0 || offerIndex >= traderFrom.GetItems().Count) { Console.WriteLine("Invalid item."); Console.ReadLine(); continue; }
+          Item offered = traderFrom.GetItems()[offerIndex];
 
-                  // Skapa en trade request
-                  tradeRequests.Add(new TradeRequest(traderFrom.GetUsername(), targetTrader.GetUsername(), requested, offered));
-                  messages.Add(new Message(traderFrom.GetUsername(), targetTrader.GetUsername(), $"Trade request sent for item {requested.GetName()} offering {offered.GetName()}")); // Skicka meddelande om trade requst
-                  Console.WriteLine("Trade request sent.");
-                }
-              }
-            }
-          }
+          tradeRequests.Add(new TradeRequest(traderFrom.GetUsername(), targetTrader.GetUsername(), requested, offered));
+          Console.WriteLine("Trade request sent.");
+          Logger.SaveTrades(tradeRequests);
           Console.ReadLine();
         }
-        // 6. Visa och svara på inkommande requests.
+
+        // 6. Show trade requests
         else if (input == "6")
         {
-          Console.WriteLine("Your incoming trade requests:");
-          int rNum = 1;
+          Console.WriteLine("Incoming trade requests:");
+          Dictionary<int, TradeRequest> reqMap = new Dictionary<int, TradeRequest>();
+          int i = 1;
           foreach (var tr in tradeRequests)
-            if (tr.GetToUser() == activeUser.GetUsername()) { Console.WriteLine($"{rNum}."); tr.Show(); rNum++; } // Visa detaljer för requesten
+            if (tr.GetToUser() == activeUser.GetUsername() && tr.GetStatus() == TradeStatus.Pending)
+            {
+              Console.WriteLine($"{i}. From: {tr.GetFromUser()} | Requested: {tr.GetRequestedItem().GetName()} | Offered: {tr.GetOfferedItem().GetName()}");
+              reqMap[i] = tr;
+              i++;
+            }
 
-          Console.WriteLine("Do you want to respond? (Y/N)");
+          if (reqMap.Count == 0) { Console.WriteLine("No pending requests."); Console.ReadLine(); continue; }
+
+          Console.Write("Do you want to respond? (Y/N): ");
           if (Console.ReadLine().ToUpper() == "Y")
           {
-            Console.Write("Enter request number to respond: ");
-            int rIndex = int.Parse(Console.ReadLine()) - 1;
-            if (rIndex >= 0 && rIndex < tradeRequests.Count)
-            {
-              var tr = tradeRequests[rIndex];
-              if (tr.GetToUser() == activeUser.GetUsername())
-              {
-                Console.Write("Accept (A) / Deny (D)? ");
-                string resp = Console.ReadLine().ToUpper();
-                if (resp == "A") tr.Accept(); // Byter ägare på items
-                else if (resp == "D") tr.Deny(); // Markera som nekat
-              }
-            }
+            Console.Write("Enter request number: ");
+            int choiceNum = int.Parse(Console.ReadLine());
+            if (!reqMap.ContainsKey(choiceNum)) { Console.WriteLine("Invalid number."); Console.ReadLine(); continue; }
+            TradeRequest selected = reqMap[choiceNum];
+
+            Console.Write("Accept (A) / Deny (D)? ");
+            string resp = Console.ReadLine().ToUpper();
+            if (resp == "A") selected.Accept(users);
+            else if (resp == "D") selected.Deny();
+            Logger.SaveTrades(tradeRequests);
+            Logger.SaveItems(users);
+            Console.WriteLine("Response recorded.");
+            Console.ReadLine();
           }
-          Console.ReadLine();
         }
-        // 7. Visa alla användare i systemet.
-        else if (input == "7")
-        {
-          Console.WriteLine("Users:");
-          foreach (var u in users) u.Info(); // Skriv ut användardata
-          Console.ReadLine();
-        }
-        // 8. Skicka meddelande till annan användare.
+
+        // 7. View users
+        else if (input == "7") { foreach (var u in users) u.Info(); Console.ReadLine(); }
+
+        // 8. Send message
         else if (input == "8")
         {
-          Console.Write("Send to (username): ");
+          Console.Write("Send to username: ");
           string to = Console.ReadLine();
           Console.Write("Message: ");
           string content = Console.ReadLine();
+          messages.Add(new Message(activeUser.GetUsername(), to, content));
+          Console.WriteLine("Message sent.");
+          Console.ReadLine();
+        }
 
-          var recipient = users.Find(u => u.GetUsername() == to);
-          if (recipient != null)
-          {
-            messages.Add(new Message(activeUser.GetUsername(), to, content));
-            Console.WriteLine("Message sent.");
-          }
-          else Console.WriteLine("User not found.");
-          Console.ReadLine();
-        }
-        // Visa alla inkomna meddeladne (inkorg)
-        else if (input == "9")
-        {
-          Console.WriteLine("Inbox:");
-          foreach (var m in messages)
-            if (m.GetTo() == activeUser.GetUsername()) m.Show();
-          Console.ReadLine();
-        }
-        // Visa alla avslutade trade requests.
+        // 9. Inbox
+        else if (input == "9") { foreach (var m in messages) if (m.GetTo() == activeUser.GetUsername()) m.Show(); Console.ReadLine(); }
+
+        // 10. Completed trade requests
         else if (input == "10")
         {
-          Console.WriteLine("Completed trade requests:");
           foreach (var tr in tradeRequests)
             if (tr.GetStatus() != TradeStatus.Pending) tr.Show();
           Console.ReadLine();
         }
-        // 11. Logga ut
-        else if (input == "11")
-        {
-          activeUser = null; // Sätt användaren till null -> utloggad
-        }
+
+        // 11. Logout
+        else if (input == "11") activeUser = null;
       }
     }
 
-    // Spara all data innan programmet stängs.
-    //
-    // Här skriver vi ner all data till fil igen, så att inget
-    // går förlorat till nästa gång programmet körs.
+    // Spara allt vid avslut
     Logger.SaveUsers(users);
     Logger.SaveItems(users);
-    Logger.SaveMessages(messages);
     Logger.SaveTrades(tradeRequests);
   }
 }

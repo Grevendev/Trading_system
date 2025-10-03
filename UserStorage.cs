@@ -1,90 +1,66 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Trading_System;
 
 namespace Trading_System
 {
-
-  // UserStorage hanterar lagring och laddning av användarobjekt till/från fil.
-  // Används för att bevara användardata (Admin/Trader) mellan programkörningar.
+  /// <summary>
+  /// Ansvarar för att läsa och spara användare från/till fil
+  /// Gör det möjligt att persistenta användardata mellan sessioner
+  /// </summary>
   public static class UserStorage
   {
+    private static string filePath = "Users.txt"; // Fil där användare sparas
 
-    // Filen där användare sparas (i samma katalog som programmet körs).
-    private static string filePath = "users.txt";
-
-    // Sparar en lista av användare till en textfil.
-    // Varje användare lagras på en egen rad i formatet.
-    // Role, Username, PasswordHash, Name
-    public static void SaveUsers(List<IUser> users)
-    {
-      // Skapar en StreamWriter som öppnar filen på angiven sökväg.
-      // using-blocket säkerställer att filen stängs och resusrser frigörs när vi är klara.
-      using (StreamWriter sw = new StreamWriter(filePath))
-      {
-        // Iterara över varje användare i listan.
-        foreach (var u in users)
-        {
-          // Hör skrivs varje användare data till filen.
-          // Exakt format (t.ex. roll;usernamne;passwordHash;name) bör defineras för att kunna läsas korrekt senare.
-          // sw.WriteLine($"{u.Role};{u.Username};{u.PasswordHash};{u.Name}");
-          // Format: Role|Username|PasswordHash|Name, Sparar användare i textformat. Viktigt: Löserord lagras som hash, inte i klartext.
-          sw.WriteLine($"{u.GetRole()}|{u.GetUsername()}|{u.GetPassword()}|{u.GetName()}");
-        }
-      }
-    }
-
-    // Läser in användare från textfilen och retunerar en lista av IUser.
-    // Om filen inte finns retuneras en tom lista. 
+    /// <summary>
+    /// Laddar användare från fil
+    /// </summary>
+    /// <returns>Lista av IUser</returns>
     public static List<IUser> LoadUsers()
     {
-      // Om filen inte finns, retunerar tom lista (ingen exeption kastas).
       List<IUser> users = new List<IUser>();
-
-      //Kontrollera om filen finns. Om inte, returnera en tom lista direkt.
-      // (dvs. det finns inga användare sparade ännu).
       if (!File.Exists(filePath)) return users;
 
-      // Öppna filen för läsning med en StreamReader. Using-blocket ser till att filen stängs korrekt när vi är klara.
+      string[] lines = File.ReadAllLines(filePath);
 
-      using (StreamReader sr = new StreamReader(filePath))
+      foreach (string line in lines)
       {
-        string line;
+        string[] parts = line.Split('|'); // username|password|name|role|isActive
+        if (parts.Length < 5) continue;
 
-        // Läs filen rad för röd tills slutet är nått.
-        while ((line = sr.ReadLine()) != null)
+        string username = parts[0];
+        string password = parts[1];
+        string name = parts[2];
+        string role = parts[3];
+        bool isActive = bool.Parse(parts[4]);
+
+        if (role == "Admin")
         {
-          // Förväntat format för varje rad i filen, Role, Username, PasswordHash, Name.
-          string[] parts = line.Split('|');
-
-          // Kontrollera att raden innehåller minst 4 delar.
-          //Om formatet inte stämmer hoppar vi över raden.
-          if (parts.Length < 4) continue;   // Hoppa över rader med fel format.
-
-          // Konventera rden första strängen i parts-arrayen till motsvarande enum-värde av typen Role.
-          // Enum.Parse retunerar ett objekt, så vi gör en explicit cast till Role.
-
-          Role role = (Role)Enum.Parse(typeof(Role), parts[0]);
-          string username = parts[1]; // andra elementet i parts representerar användarnamnet som en vanlig sträng.
-          string passwordHash = parts[2]; // Tredje elementet innehåller användarens lösenord i hashad form.
-          string name = parts[3]; // Fjärde elementet är användarens visingsnamn eller fullständinga namn.
-
-          // Skapa korrekt användarobjekt baserat på roll.
-
-          if (role == Role.Admin)
-            users.Add(new Admin(username, passwordHash, name));
-          else if (role == Role.Trader)
-          {
-            // Trader-objekt behöver en temporär sträng för lösenord i konstruktorn (eftersom hash sätts separat via SetPasswordHash).
-            Trader t = new Trader(username, "temp", name);
-            t.SetPasswordHash(passwordHash); // Skriv över med korrekt hash. 
-            users.Add(t);
-          }
+          Admin admin = new Admin(username, password, name);
+          admin.SetIsActive(isActive);
+          users.Add(admin);
+        }
+        else if (role == "Trader")
+        {
+          Trader trader = new Trader(username, password, name);
+          trader.SetIsActive(isActive);
+          users.Add(trader);
         }
       }
-
       return users;
+    }
+
+    /// <summary>
+    /// Sparar användare till fil
+    /// </summary>
+    public static void SaveUsers(List<IUser> users)
+    {
+      List<string> lines = new List<string>();
+      foreach (IUser u in users)
+      {
+        lines.Add($"{u.GetUsername()}|{u.GetPassword()}|{u.GetName()}|{u.GetRole()}|{u.GetIsActive()}");
+      }
+      File.WriteAllLines(filePath, lines);
     }
   }
 }

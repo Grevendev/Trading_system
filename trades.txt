@@ -1,2 +1,1 @@
-kalle|tina|sten|påse|Accepted
-tina|kalle|påse|sten|Pending
+edvin|hans|rod|boat|Accepted
