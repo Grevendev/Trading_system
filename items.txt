@@ -2,3 +2,6 @@ bord|svart|lisa
 stol|röd|lena
 boat|black|hans
 rod|ros|edvin
+buss|liten|lotta
+bil|stor|sixt
+||sixt

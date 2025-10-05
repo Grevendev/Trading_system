@@ -7,3 +7,5 @@ lisa|ZDg0ZmU3ZTA3YmVkYjIyN2NmZmZmMTAwMDkxNTFkOTZmYzk0NGY2YTFiZDM3Y2ZmNjBlOGU0NjI
 lena|Y2M5Njc0NDMwNzBhYjQwOWE1N2E0NTVkYzhjMjQwNWExMGI2YmE5NmNhNzVmODdiY2YxOGNhMzY4YmIwOTBhOA==|lena|Trader|True
 hans|hans|hans|Trader|True
 edvin|edvin|edvin|Trader|True
+lotta|lotta|lotta|Trader|True
+sixt|sixt|sixt|Trader|True
