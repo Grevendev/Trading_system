@@ -4,58 +4,68 @@ using System.IO;
 
 namespace Trading_System
 {
-  // Hanterar sparning och laddning av items till/från en textfil.
-  //Gör det möjligt att bevara traders föremål mellan programstarter. 
+  /// <summary>
+  /// ItemStorage ansvarar för att spara och läsa in items till/från fil.
+  /// Detta gör att items bevaras mellan programkörningar utan databas.
+  /// </summary>
   public static class ItemStorage
   {
+    private static string filePath = "Items.txt"; // Filen där alla items sparas
 
-    private static string filePath = "Items.txt"; // Fil där alla items lagras.
-
-
-    // Sparar alla tarders items till fil.
-    //Varje rad representerar ett föremål i formatet:
-    //namn|beskriving|ägarens användarnamn 
+    /// <summary>
+    /// Sparar alla items för alla traders i fil.
+    /// </summary>
+    /// <param name="users">Lista med alla användare</param>
     public static void SaveItems(List<IUser> users)
     {
       List<string> lines = new List<string>();
 
-      //Loopar igenom alla användare och plockar ut deras items om det är traders.
+      // Loopar igenom alla användare
       foreach (var u in users)
       {
+        // Vi sparar endast items för Trader-objekt
         if (u is Trader tr)
         {
+          // Loopar igenom varje item tradern äger
           foreach (var item in tr.GetItems())
           {
+            // Sparar namn, beskrivning och ägare separerat med '|'
             lines.Add($"{item.GetName()}|{item.GetDescription()}|{item.GetOwnerUsername()}");
           }
         }
       }
 
-      //Sparar allt till filen.
+      // Skriver alla lines till fil
       File.WriteAllLines(filePath, lines);
     }
 
-    // Laddar in alla items från filen och tilldelar dem till rätt trader.
+    /// <summary>
+    /// Läser in items från fil och kopplar dem till rätt trader.
+    /// </summary>
+    /// <param name="users">Lista med alla användare</param>
     public static void LoadItems(List<IUser> users)
     {
-      //Avbryt om ingen fil finns (första körningen)
-      if (!File.Exists(filePath)) return;
+      if (!File.Exists(filePath)) return; // Om filen inte finns, gör ingenting
+
       string[] lines = File.ReadAllLines(filePath);
+
       foreach (string line in lines)
       {
-        string[] parts = line.Split('|');
-        if (parts.Length < 3) continue; //Skygg mot trasiga rader.
+        string[] parts = line.Split('|'); // Format: name|description|owner
+        if (parts.Length < 3) continue;
+
         string name = parts[0];
-        string desc = parts[1];
+        string description = parts[1];
         string owner = parts[2];
 
-        // Hitta rätt trader och lägg till itemet i dennes lista
+        // Hitta tradern som äger item
         foreach (var u in users)
         {
-          if (u.GetUsername() == owner && u is Trader tr)
+          if (u is Trader tr && tr.GetUsername() == owner)
           {
-            tr.GetItems().Add(new Item(name, desc, owner));
-            break;
+            // Lägg till item i traderns lista
+            tr.GetItems().Add(new Item(name, description, owner));
+            break; // Gå vidare till nästa item
           }
         }
       }

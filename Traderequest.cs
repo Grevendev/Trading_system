@@ -3,10 +3,24 @@ using System.Collections.Generic;
 
 namespace Trading_System
 {
-  public enum TradeStatus { Pending, Accepted, Denied }
+  /// <summary>
+  /// Enum som definierar status på en trade request.
+  /// </summary>
+  public enum TradeStatus
+  {
+    Pending,  // Förfrågan skickad men inte besvarad
+    Accepted, // Förfrågan accepterad och trade genomförd
+    Denied    // Förfrågan nekad
+  }
 
   /// <summary>
-  /// Representerar en bytesförfrågan mellan två Traders.
+  /// Representerar en bytesförfrågan mellan två användare.
+  /// Innehåller information om:
+  /// - Från vilken användare
+  /// - Till vilken användare
+  /// - Vilket item som efterfrågas
+  /// - Vilket item som erbjuds
+  /// - Status på förfrågan
   /// </summary>
   public class TradeRequest
   {
@@ -31,44 +45,66 @@ namespace Trading_System
     public Item GetOfferedItem() => _offeredItem;
     public TradeStatus GetStatus() => _status;
 
+    /// <summary>
+    /// Accepterar trade requesten och byter ägare på items.
+    /// Endast om status är Pending.
+    /// </summary>
+    /// <param name="users">Lista av alla användare i systemet</param>
     public void Accept(List<IUser> users)
     {
       if (_status != TradeStatus.Pending) return;
 
-      // Hitta Trader-objekt för ägaren
+      // Hitta Trader-objekt baserat på ägare av items
       Trader fromTrader = null;
       Trader toTrader = null;
+
       foreach (var u in users)
       {
-        if (u.GetUsername() == _fromUser) fromTrader = u as Trader;
-        if (u.GetUsername() == _toUser) toTrader = u as Trader;
+        if (u is Trader tr)
+        {
+          if (tr.GetUsername() == _fromUser) fromTrader = tr;
+          if (tr.GetUsername() == _toUser) toTrader = tr;
+        }
       }
 
       if (fromTrader != null && toTrader != null)
       {
+        // Ta bort item från respektive ägare
+        fromTrader.RemoveItem(_offeredItem);
+        toTrader.RemoveItem(_requestedItem);
+
         // Byt ägare
-        _requestedItem.ChangeOwner(_fromUser);
         _offeredItem.ChangeOwner(_toUser);
+        _requestedItem.ChangeOwner(_fromUser);
 
-        // Uppdatera ägarnas item-listor
-        fromTrader.GetItems().Remove(_offeredItem);
+        // Lägg till items i nya ägares lista
         fromTrader.GetItems().Add(_requestedItem);
-
-        toTrader.GetItems().Remove(_requestedItem);
         toTrader.GetItems().Add(_offeredItem);
 
+        // Uppdatera status
         _status = TradeStatus.Accepted;
       }
     }
 
-    public void Deny() => _status = TradeStatus.Denied;
+    /// <summary>
+    /// Neka trade request.
+    /// Endast status ändras, inga items byts.
+    /// </summary>
+    public void Deny()
+    {
+      if (_status != TradeStatus.Pending) return;
+      _status = TradeStatus.Denied;
+    }
 
+    /// <summary>
+    /// Visar detaljer för trade request.
+    /// </summary>
     public void Show()
     {
       Console.WriteLine($"From: {_fromUser} -> To: {_toUser}");
       Console.WriteLine($"Requested Item: {_requestedItem.GetName()} | Offered Item: {_offeredItem.GetName()}");
       Console.WriteLine($"Status: {_status}");
-      Console.WriteLine("-------------------------------");
+      Console.WriteLine("-----------------------------");
     }
   }
 }

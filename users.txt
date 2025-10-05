@@ -9,3 +9,5 @@ hans|hans|hans|Trader|True
 edvin|edvin|edvin|Trader|True
 lotta|lotta|lotta|Trader|True
 sixt|sixt|sixt|Trader|True
+sami|sami|sami|Trader|True
+tim|tim|tim|Trader|True

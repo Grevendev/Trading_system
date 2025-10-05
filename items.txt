@@ -5,3 +5,5 @@ rod|ros|edvin
 buss|liten|lotta
 bil|stor|sixt
 ||sixt
+tv|rosa|sami
+dator|svart|tim

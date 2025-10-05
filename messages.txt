@@ -6,3 +6,4 @@ edvin|oskar|Trade request sent for item sten offering pony
 lena|lisa|Trade request sent for item stol offering bord
 lena|lisa|hej
 edvin|hans|Trade request sent for rod offering boat
+tim|sami|Trade request sent for item dator offering tv

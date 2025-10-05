@@ -4,44 +4,82 @@ using System.Collections.Generic;
 namespace Trading_System
 {
   /// <summary>
-  /// Samlad klass för laddning och sparning av data.
-  /// Fungerar som en central plats där alla Save/Load-metoder anropas.
+  /// Logger ansvarar för att samla alla Save/Load-funktioner.
+  /// Den fungerar som ett gränssnitt mot filhanteringen.
   /// </summary>
   public static class Logger
   {
+    /// <summary>
+    /// Laddar alla användare från fil via UserStorage.
+    /// </summary>
+    /// <returns>Lista med IUser</returns>
+    public static List<IUser> LoadUsers()
+    {
+      return UserStorage.LoadUsers();
+    }
 
-    // Läser in alla användare från fil via UserStorage.
-    public static List<IUser> LoadUsers() => UserStorage.LoadUsers();
+    /// <summary>
+    /// Sparar alla användare via UserStorage.
+    /// </summary>
+    /// <param name="users">Lista med IUser</param>
+    public static void SaveUsers(List<IUser> users)
+    {
+      UserStorage.SaveUsers(users);
+    }
 
-    //Sparar alla användare till fill via UserStorage.
-    public static void SaveUsers(List<IUser> users) => UserStorage.SaveUsers(users);
+    /// <summary>
+    /// Laddar alla items för användare via ItemStorage.
+    /// </summary>
+    /// <param name="users">Lista med IUser</param>
+    public static void LoadItems(List<IUser> users)
+    {
+      ItemStorage.LoadItems(users);
+    }
 
+    /// <summary>
+    /// Sparar alla items för användare via ItemStorage.
+    /// </summary>
+    /// <param name="users">Lista med IUser</param>
+    public static void SaveItems(List<IUser> users)
+    {
+      ItemStorage.SaveItems(users);
+    }
 
-    // Läser in alla items från fil via ItemStorage.
-    public static void LoadItems(List<IUser> users) => ItemStorage.LoadItems(users);
+    /// <summary>
+    /// Laddar alla trade requests via TradeStorage.
+    /// </summary>
+    /// <param name="users">Lista med alla användare</param>
+    /// <returns>Lista med TradeRequest</returns>
+    public static List<TradeRequest> LoadTrades(List<IUser> users)
+    {
+      return TradeStorage.LoadTrades(users);
+    }
 
-    // Sparar alla items till fil via ItemStorage.
-    public static void SaveItems(List<IUser> users) => ItemStorage.SaveItems(users);
+    /// <summary>
+    /// Sparar alla trade requests via TradeStorage.
+    /// </summary>
+    /// <param name="trades">Lista med TradeRequest</param>
+    public static void SaveTrades(List<TradeRequest> trades)
+    {
+      TradeStorage.SaveTrades(trades);
+    }
 
-
-    // Läser in alla trades (trade requests) via TradeStorage.
-    public static List<TradeRequest> LoadTrades(List<IUser> users) => TradeStorage.LoadTrades(users);
-
-    //Sparar alla trades till fil via TradeStorage.
-    public static void SaveTrades(List<TradeRequest> trades) => TradeStorage.SaveTrades(trades);
-
-    //Laddar alla meddelande (om funktionen används). 
-    //Just nu retuneras en tom lista då meddelande inte sparas permanent.
+    /// <summary>
+    /// Laddar alla meddelanden från fil via MessageStorage.
+    /// </summary>
+    /// <returns>Lista med Message</returns>
     public static List<Message> LoadMessages()
     {
-      // Här kan man lägga till filinläsning för meddelande om man vill utöka systemet.
-      return new List<Message>();
+      return MessageStorage.LoadMessages();
     }
-    //Sparar alla meddelande  (om funktionen används).
-    //Just nu görs ingen filskivning, men kan enkelt läggas till senare.
+
+    /// <summary>
+    /// Sparar alla meddelanden till fil via MessageStorage.
+    /// </summary>
+    /// <param name="messages">Lista med Message</param>
     public static void SaveMessages(List<Message> messages)
     {
-      // Här kan man implementera filskriving för meddelanden. 
+      MessageStorage.SaveMessages(messages);
     }
   }
 }
