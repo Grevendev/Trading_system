@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # Trading System
 
 ## Quick Start
@@ -135,4 +135,4 @@ It is easily extendable with additional features, such as:
 # Trading_system
 Trading plattform in GitBash Terminal
 Program exist in Trading-branch
->>>>>>> origin/main
+
