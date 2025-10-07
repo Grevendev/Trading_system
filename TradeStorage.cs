@@ -61,7 +61,7 @@ namespace Trading_System
         {
           TradeRequest tr = new TradeRequest(fromUser, toUser, requested, offered);
 
-          //Konventera status-strängen från filen till TradeStatus enim
+          //Konventera status-strängen från filen till TradeStatus enum
           TradeStatus status;
           Enum.TryParse(statusStr, out status);
 
